@@ -924,6 +924,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4034176766208782803, guid: 2534bd7c781b28747a0582d4a9dcc604, type: 3}
+      propertyPath: camSensitivity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4034176766208782803, guid: 2534bd7c781b28747a0582d4a9dcc604, type: 3}
       propertyPath: camSensitivity.x
       value: 0.3
       objectReference: {fileID: 0}
