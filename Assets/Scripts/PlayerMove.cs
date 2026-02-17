@@ -76,7 +76,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 forward = Quaternion.Euler(0, yRotation, 0) * Vector3.forward;
         Vector3 right = Quaternion.Euler(0, yRotation, 0) * Vector3.right;
 
-        float currentSpeed = sprintAction.IsPressed() ? moveSpeed * 1.5f : moveSpeed;
+        float currentSpeed = sprintAction.IsPressed() ? moveSpeed * 2.0f : moveSpeed;
         Vector3 movePower = ((forward * moveValue.y) + (right * moveValue.x)) * currentSpeed;
 
 
