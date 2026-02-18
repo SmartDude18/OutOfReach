@@ -174,7 +174,7 @@ MonoBehaviour:
   maxSpeed: 20
   jumpHeight: 7
   groundCheckDistance: 0.3
-  camSensitivity: {x: 0.3, y: 0.2}
+  camSensitivity: 1
   camMaxAngle: 45
   camMinAngle: -90
 --- !u!114 &4930939390749775072

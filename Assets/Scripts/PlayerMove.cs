@@ -1,4 +1,3 @@
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,8 +23,8 @@ public class PlayerMove : MonoBehaviour
     private float jumpHeight;
     [SerializeField]
     private float groundCheckDistance;
-    [SerializeField] 
-    [Range(1.0f,100)]
+    [SerializeField]
+    [Range(1.0f, 100)]
     private float camSensitivity;
     [SerializeField]
     private float camMaxAngle, camMinAngle;
@@ -35,50 +34,73 @@ public class PlayerMove : MonoBehaviour
     InputAction moveAction;
     InputAction jumpAction;
     InputAction camAction;
+    InputAction sprintAction;
+
+    Vector2 lookValue;
     private Rigidbody body;
     bool hasJumped;
     private float camX = 0;
+    private float yRotation;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         body = transform.GetComponent<Rigidbody>();
-        body.maxLinearVelocity = maxSpeed;
 
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
         camAction = InputSystem.actions.FindAction("Look");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
 
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //read input
+        lookValue = camAction.ReadValue<Vector2>();
+        yRotation += lookValue.x * (camSensitivity * 0.1f);
+        camX -= lookValue.y * (camSensitivity * 0.1f);
+        camX = Mathf.Clamp(camX, camMinAngle, camMaxAngle);
+
+        transform.rotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
         Vector2 moveValue = moveAction.ReadValue<Vector2>();
-        Vector2 lookValue = camAction.ReadValue<Vector2>();
         bool isGrounded = groundCheck();
 
-        //broadcast system
         dataSystem.PlayerMove(moveValue.magnitude > 0, moveValue.magnitude);
         dataSystem.PlayerGrounded(isGrounded);
 
-        //transform.rotation = Quaternion.Euler(transform.rotation.x, cam.transform.eulerAngles.y, transform.rotation.z);
-        updateCamera(lookValue);
-        Vector3 movePower = ((transform.forward * moveValue.y) + (transform.right * moveValue.x)) * moveSpeed;
-        if (isGrounded)
+        Vector3 forward = Quaternion.Euler(0, yRotation, 0) * Vector3.forward;
+        Vector3 right = Quaternion.Euler(0, yRotation, 0) * Vector3.right;
+
+        float currentSpeed = sprintAction.IsPressed() ? moveSpeed * 2.0f : moveSpeed;
+        Vector3 movePower = ((forward * moveValue.y) + (right * moveValue.x)) * currentSpeed;
+
+
+
+        if (isGrounded && !hasJumped)
         {
-            //movePower = ((-getGround().transform.forward * moveValue.y) + (-getGround().transform.right * moveValue.x)) * moveSpeed;
-            movePower = movePower.ProjectOntoPlane(getGround().normal);
+            movePower = Vector3.ProjectOnPlane(movePower, getGround().normal);
+            Vector3 newVelocity = movePower;
+            newVelocity.y = body.linearVelocity.y;
+            body.linearVelocity = newVelocity;
         }
-        //movement
+        else if (!isGrounded)
+        {
+            body.AddForce(movePower, ForceMode.Force);
 
-        body.AddForce(movePower, ForceMode.Force);
+            // Clamp only horizontal velocity in air, leave Y alone
+            Vector3 flat = new Vector3(body.linearVelocity.x, 0, body.linearVelocity.z);
+            if (flat.magnitude > maxSpeed)
+            {
+                flat = flat.normalized * maxSpeed;
+                body.linearVelocity = new Vector3(flat.x, body.linearVelocity.y, flat.z);
+            }
+        }
 
-
-        //jump system
-        //has jumped is used to make the movement off of 1 frame of jump force, making the jump more consistent
-        //could be messed with in theory by pressing quickly while still in ground check range, but for how small it is... good luck
         if (jumpAction.IsPressed() && isGrounded && !hasJumped)
         {
             hasJumped = true;
@@ -88,6 +110,12 @@ public class PlayerMove : MonoBehaviour
         {
             hasJumped = false;
         }
+    }
+
+
+    public void LateUpdate()
+    {
+        cam.transform.localRotation = Quaternion.Euler(camX, yRotation, 0);
     }
 
     private void jump()
@@ -109,11 +137,4 @@ public class PlayerMove : MonoBehaviour
         return hit;
     }
 
-    private void updateCamera(Vector2 lookValue)
-    {
-        transform.Rotate(new Vector3(0, lookValue.x * (camSensitivity * 0.1f), 0));
-        camX -= lookValue.y * (camSensitivity * 0.1f);
-        camX = Mathf.Clamp(camX, camMinAngle, camMaxAngle);
-        cam.transform.localRotation = Quaternion.Euler(camX, cam.transform.localRotation.y , cam.transform.localRotation.z);
-    }
 }
