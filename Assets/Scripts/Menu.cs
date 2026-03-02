@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
     public void StartGame()
     {
         menuMusic.Stop();
-        SceneManager.LoadScene("Sound Testing");
+        SceneManager.LoadScene("Main Scene");
     }
     public void ExitGame()
     {

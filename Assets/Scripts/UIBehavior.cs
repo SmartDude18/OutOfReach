@@ -9,7 +9,7 @@ public class UIBehavior : MonoBehaviour
     [SerializeField] TMP_Text timerText;
 
     private float timerS = 0;
-    private float timerM = 0;
+    private int timerM = 0;
     private int deathCount = 0;
     private bool isPaused = false;
 
@@ -56,8 +56,7 @@ public class UIBehavior : MonoBehaviour
             {
                 timerText.text = timerM.ToString() + ":" + ((int)timerS).ToString();
             }
-        }
-            
+        }    
     }
     private void OnDeath()
     {
