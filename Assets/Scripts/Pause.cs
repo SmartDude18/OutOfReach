@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Pause : MonoBehaviour
 {
@@ -27,27 +28,34 @@ public class Pause : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (InputSystem.actions.FindAction("Pause").WasPressedThisFrame())
         {
-            //pause game
-            Time.timeScale = 0;
-            pauseMenu.SetActive(true);
-            if (!pauseMusic.isPlaying)
+            PauseGame();
+            MockPlayer();
+        }
+    }
+    private void PauseGame()
+    {
+        //pause game
+        Time.timeScale = 0;
+        pauseMenu.SetActive(true);
+        if (!pauseMusic.isPlaying)
+        {
+            pauseMusic.Play();
+        }
+        pauseCount++;
+    }
+    private void MockPlayer()
+    {
+        if (pauseMocking != null)
+        {
+            if (pauseCount == 1)
             {
-                pauseMusic.Play();
+                narrator?.PlayOneShot(pauseMocking);
             }
-            pauseCount++;
-
-            if(pauseMocking != null)
+            else
             {
-                if(pauseCount == 1)
-                {
-                    narrator?.PlayOneShot(pauseMocking);
-                }
-                else
-                {
-                    narrator?.PlayOneShot(pauseMocking2);
-                }
+                narrator?.PlayOneShot(pauseMocking2);
             }
         }
     }
