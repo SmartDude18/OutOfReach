@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] float sensitivity = 1f;
     [SerializeField] float minPitch = -80f;
     [SerializeField] float maxPitch = 80f;
+    [SerializeField] UIBehavior UI;
 
     InputAction lookAction;
     Vector2 lookInput;
@@ -28,11 +29,14 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        rotation.x -= lookInput.y * sensitivity;
-        rotation.y += lookInput.x * sensitivity;
-        rotation.x = Mathf.Clamp(rotation.x, minPitch, maxPitch);
+        if (!UI.isPaused)
+        {
+            rotation.x -= lookInput.y * sensitivity;
+            rotation.y += lookInput.x * sensitivity;
+            rotation.x = Mathf.Clamp(rotation.x, minPitch, maxPitch);
 
-        transform.rotation = Quaternion.Euler(rotation);
+            transform.rotation = Quaternion.Euler(rotation);
+        }
     }
 
     void Look(InputAction.CallbackContext ctx)

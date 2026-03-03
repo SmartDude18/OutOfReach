@@ -6,6 +6,7 @@ public class Pause : MonoBehaviour
     //UI Elements
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject confirmationMenu;
+    [SerializeField] UIBehavior behavior;
 
     //Music
     [SerializeField] AudioSource pauseMusic;
@@ -15,6 +16,7 @@ public class Pause : MonoBehaviour
     [SerializeField] AudioClip pauseMocking;
     [SerializeField] AudioClip pauseMocking2;
     [SerializeField] AudioClip quitMocking;
+    
 
     private int pauseCount = 0;
 
@@ -37,6 +39,7 @@ public class Pause : MonoBehaviour
     private void PauseGame()
     {
         //pause game
+        behavior.OnPause();
         Time.timeScale = 0;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -71,6 +74,7 @@ public class Pause : MonoBehaviour
         Time.timeScale = 1;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        behavior.OnContinue();
     }
     public void OnExit()
     {
@@ -86,6 +90,7 @@ public class Pause : MonoBehaviour
     public void OnConfirm()
     {
         Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
     }
     public void OnDeny()
     {

@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string[] deathTags = new string[] { };
     [SerializeField] private GameManager gameManager;
 
+
     CharacterController controller;
     InputAction moveAction;
     InputAction jumpAction;
@@ -166,22 +167,31 @@ public class PlayerController : MonoBehaviour
                 activeFlags.Add(other.gameObject);
                 break;
             case "Restart":
-                Debug.Log("we in");
-                gameManager.UpdateSpawnpoint(true);
-
-                foreach(GameObject flag in activeFlags)
-                {
-                    SetCheckpointActive(flag, 1, true);
-                    SetCheckpointActive(flag, 2, false);
-                }
-                activeFlags.Remove(other.gameObject);
-                controller.enabled = false;
-                transform.position = gameManager.spawnPoint;
-                controller.enabled = true;
-                gameManager.UpdateWinSign();
+                ResetPlayer(other.gameObject);
 
                 break;
+            case "End":
+                playerDeaths = 0;
+                dataSystem.PlayerReachesEnd();
+                ResetPlayer(other.gameObject);
+                break;
         }
+    }
+
+    public void ResetPlayer(GameObject other)
+    {
+        gameManager.UpdateSpawnpoint(true);
+
+        foreach (GameObject flag in activeFlags)
+        {
+            SetCheckpointActive(flag, 1, true);
+            SetCheckpointActive(flag, 2, false);
+        }
+        activeFlags.Remove(other);
+        controller.enabled = false;
+        transform.position = gameManager.spawnPoint;
+        controller.enabled = true;
+        gameManager.UpdateWinSign();
     }
 
 
