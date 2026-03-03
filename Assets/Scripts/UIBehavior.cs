@@ -30,33 +30,20 @@ public class UIBehavior : MonoBehaviour
     }
     private void formatTimer()
     {
-        if(timerS >= 60)
+        if (timerS >= 60)
         {
             timerM++;
             timerS = 0;
         }
-        if(timerM < 10)
+        timerText.text = formatDigit(timerM) + ":" + formatDigit((int)timerS);
+    }
+    private string formatDigit(int num)
+    {
+        if (num < 10)
         {
-            if(timerS < 10)
-            {
-                timerText.text = "0" + timerM.ToString() + ":" + "0" + ((int)timerS).ToString();
-            }
-            else
-            {
-                timerText.text = "0" + timerM.ToString() + ":" + ((int)timerS).ToString();
-            }
+            return "0" + num.ToString();
         }
-        else
-        {
-            if(timerS < 10)
-            {
-                timerText.text = timerM.ToString() + ":" + "0" + ((int)timerS).ToString();
-            }
-            else
-            {
-                timerText.text = timerM.ToString() + ":" + ((int)timerS).ToString();
-            }
-        }    
+        return num.ToString();
     }
     private void OnDeath()
     {
