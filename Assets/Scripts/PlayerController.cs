@@ -75,8 +75,8 @@ public class PlayerController : MonoBehaviour
 
         
 
-        Vector3 vXZ = new Vector3(velocity.x, 0, velocity.z);
-        if(vXZ.magnitude <= 0)
+        Vector3 XZVelocity = new Vector3(velocity.x, 0, velocity.z);
+        if(XZVelocity.magnitude <= 0)
         {
             gameManager.UpdateInvisibleLevel(true);
         }else if(velocity.magnitude > 0)
@@ -84,11 +84,11 @@ public class PlayerController : MonoBehaviour
             gameManager.UpdateInvisibleLevel(false);
         }
 
-        vXZ += acceleration * Time.deltaTime;
-        vXZ = Vector3.ClampMagnitude(vXZ, isSprinting ? data.sprintSpeed : data.speed);
+        XZVelocity += acceleration * Time.deltaTime;
+        XZVelocity = Vector3.ClampMagnitude(XZVelocity, isSprinting ? data.sprintSpeed : data.speed);
 
-        velocity.x = vXZ.x;
-        velocity.z = vXZ.z;
+        velocity.x = XZVelocity.x;
+        velocity.z = XZVelocity.z;
 
         if (movement.sqrMagnitude <= 0 && onGround)
         {
