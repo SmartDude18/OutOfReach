@@ -103,7 +103,6 @@ public class GameManager : MonoBehaviour
 
         if (visible)
         {
-            Debug.Log("Active true: " + activeObjects.Count);
             for (int i = 0; i < activeObjects.Count; i++)
             {
                 activeObjects[i].GetComponent<Renderer>().enabled = true;
