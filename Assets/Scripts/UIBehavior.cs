@@ -45,7 +45,7 @@ public class UIBehavior : MonoBehaviour
         }
         return num.ToString();
     }
-    private void OnDeath()
+    public void OnDeath()
     {
         //increment death counter
         deathCount++;

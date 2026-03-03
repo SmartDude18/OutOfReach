@@ -6,6 +6,8 @@ public class PlayerDataBroadcast : MonoBehaviour
     [SerializeField] AudioClip spikeDeathClip;
     [SerializeField] AudioClip pitDeathClip;
 
+    [SerializeField] UIBehavior uiBehavior;
+
     public void PlayerMove(bool isMove, float moveMagnitude)
     {
         if(isMove)
@@ -65,5 +67,6 @@ public class PlayerDataBroadcast : MonoBehaviour
                 Debug.Log("Bad Checkpoint");
                 break;
         }
+        uiBehavior?.OnDeath();
     }
 }
