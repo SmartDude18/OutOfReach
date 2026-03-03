@@ -14,7 +14,7 @@ public class Menu : MonoBehaviour
     public void StartGame()
     {
         menuMusic.Stop();
-        SceneManager.LoadScene("Main Scene");
+        SceneManager.LoadScene("GameScene");
     }
     public void ExitGame()
     {
