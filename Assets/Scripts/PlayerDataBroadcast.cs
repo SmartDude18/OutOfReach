@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class PlayerDataBroadcast : MonoBehaviour
 {
+    [SerializeField] AudioSource narrator;
+    [SerializeField] AudioClip spikeDeathClip;
+    [SerializeField] AudioClip pitDeathClip;
+
     public void PlayerMove(bool isMove, float moveMagnitude)
     {
         if(isMove)
@@ -43,10 +47,18 @@ public class PlayerDataBroadcast : MonoBehaviour
             case "spike":
                 //audio for spike death
                 Debug.Log("Spike Death");
+                if (spikeDeathClip != null)
+                {
+                    narrator?.PlayOneShot(spikeDeathClip);
+                }
                 break;
             case "DeathBox":
                 //audio for falling off
                 Debug.Log("Fall death");
+                if (pitDeathClip != null)
+                {
+                    narrator?.PlayOneShot(pitDeathClip);
+                }
                 break;
             case "badCheckpoint":
                 //audio for hitting bad checkpoint
