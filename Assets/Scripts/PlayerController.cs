@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public int playerDeaths { get; private set; }
 
     public Transform View { get => view; set => view = value; }
+
+    private List<GameObject> activeFlags = new List<GameObject>();
 
     void Start()
     {
@@ -157,13 +160,21 @@ public class PlayerController : MonoBehaviour
         {
             case "Checkpoint":
                 gameManager.UpdateSpawnpoint(false);
-                other.gameObject.transform.GetChild(other.gameObject.transform.childCount - 1).gameObject.SetActive(false);
-                other.gameObject.transform.GetChild(other.gameObject.transform.childCount - 2).gameObject.SetActive(true);
+
+                SetCheckpointActive(other.gameObject, 1, false);
+                SetCheckpointActive(other.gameObject, 2, true);
+                activeFlags.Add(other.gameObject);
                 break;
             case "Restart":
                 Debug.Log("we in");
                 gameManager.UpdateSpawnpoint(true);
 
+                foreach(GameObject flag in activeFlags)
+                {
+                    SetCheckpointActive(flag, 1, true);
+                    SetCheckpointActive(flag, 2, false);
+                }
+                activeFlags.Remove(other.gameObject);
                 controller.enabled = false;
                 transform.position = gameManager.spawnPoint;
                 controller.enabled = true;
@@ -171,5 +182,11 @@ public class PlayerController : MonoBehaviour
 
                 break;
         }
+    }
+
+
+    private void SetCheckpointActive(GameObject other, int childIndex, bool active)
+    {
+        other.transform.GetChild(other.gameObject.transform.childCount - childIndex).gameObject.SetActive(active);
     }
 }

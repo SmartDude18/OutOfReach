@@ -30,15 +30,13 @@ public class GameManager : MonoBehaviour
         {
             int randTag = Random.Range(0, 4);
             if (randTag > 0) 
-            { 
-                CheckPoints[i].gameObject.tag = "Checkpoint";
-                CheckPoints[i].gameObject.transform.GetChild(0).GetComponent<Renderer>().material = CheckPointMaterials[0];
+            {
+                SetRandomCheckpoint(i, "Checkpoint", 0);
 
             }
             else 
             {
-                CheckPoints[i].gameObject.tag = "Restart";
-                CheckPoints[i].gameObject.transform.GetChild(0).GetComponent<Renderer>().material = CheckPointMaterials[1];
+                SetRandomCheckpoint(i, "Restart", 1);
             }
         }
 
@@ -125,8 +123,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-
-
+    private void SetRandomCheckpoint(int index, string tag, int matIndex)
+    {
+        CheckPoints[index].gameObject.tag = tag;
+        CheckPoints[index].gameObject.transform.GetChild(0).GetComponent<Renderer>().material = CheckPointMaterials[matIndex];
+    }
 }
