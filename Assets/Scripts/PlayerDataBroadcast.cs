@@ -69,4 +69,9 @@ public class PlayerDataBroadcast : MonoBehaviour
         }
         uiBehavior?.OnDeath();
     }
+
+    public void PlayerReachesEnd()
+    {
+        uiBehavior?.ResetGame();
+    }
 }

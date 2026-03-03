@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIBehavior : MonoBehaviour
@@ -7,16 +8,16 @@ public class UIBehavior : MonoBehaviour
     
     [SerializeField] TMP_Text deathCounterText;
     [SerializeField] TMP_Text timerText;
+    [SerializeField] PlayerController Player;
 
     private float timerS = 0;
     private int timerM = 0;
-    private int deathCount = 0;
-    private bool isPaused = false;
+    public bool isPaused { get; private set; } = false;
 
     void Start()
     {
         formatTimer();
-        deathCounterText.text = deathCount.ToString();
+        deathCounterText.text = Player.playerDeaths.ToString();
     }
 
     void Update()
@@ -47,20 +48,26 @@ public class UIBehavior : MonoBehaviour
     }
     public void OnDeath()
     {
-        //increment death counter
-        deathCount++;
-        deathCounterText.text = deathCount.ToString();
+    
+        deathCounterText.text = Player.playerDeaths.ToString();
     }
 
-    private void OnPause()
+    public void OnPause()
     {
         //pause timer
         isPaused = true;
     }
 
-    private void OnContinue()
+    public void OnContinue()
     {
         //start timer
         isPaused = false;
     }
+
+    public void ResetGame()
+    {
+        timerS = 0;
+        timerM = 0;
+    }
+    
 }
