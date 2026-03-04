@@ -19,6 +19,7 @@ public class Pause : MonoBehaviour
     
 
     private int pauseCount = 0;
+    private bool paused = false;
 
 
     private void Start()
@@ -30,10 +31,11 @@ public class Pause : MonoBehaviour
 
     private void Update()
     {
-        if (InputSystem.actions.FindAction("Pause").WasPressedThisFrame())
+        if (InputSystem.actions.FindAction("Pause").WasPressedThisFrame() && !paused)
         {
             PauseGame();
             MockPlayer();
+            paused = true;
         }
     }
     private void PauseGame()
@@ -75,6 +77,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         behavior.OnContinue();
+        paused = false;
     }
     public void OnExit()
     {
