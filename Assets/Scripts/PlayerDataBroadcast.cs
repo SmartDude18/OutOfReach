@@ -1,3 +1,4 @@
+using Unity.Collections;
 using UnityEngine;
 
 public class PlayerDataBroadcast : MonoBehaviour
@@ -7,6 +8,8 @@ public class PlayerDataBroadcast : MonoBehaviour
     [SerializeField] AudioClip pitDeathClip;
 
     [SerializeField] UIBehavior uiBehavior;
+
+    public AudioSource narr {  get { return narrator; } }
 
     public void PlayerMove(bool isMove, float moveMagnitude)
     {

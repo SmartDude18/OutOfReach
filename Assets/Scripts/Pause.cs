@@ -8,11 +8,13 @@ public class Pause : MonoBehaviour
     [SerializeField] GameObject confirmationMenu;
     [SerializeField] UIBehavior behavior;
 
+    [SerializeField] PlayerDataBroadcast broadcast;
+
     //Music
     [SerializeField] AudioSource pauseMusic;
 
     //dialogue
-    [SerializeField] AudioSource narrator;
+    [SerializeField] public AudioSource narrator;
     [SerializeField] AudioClip pauseMocking;
     [SerializeField] AudioClip pauseMocking2;
     [SerializeField] AudioClip quitMocking;
@@ -21,12 +23,12 @@ public class Pause : MonoBehaviour
     private int pauseCount = 0;
     private bool paused = false;
 
-
     private void Start()
     {
         pauseMenu.SetActive(false);
         confirmationMenu.SetActive(false);
         pauseMusic.Stop();
+
     }
 
     private void Update()
@@ -58,11 +60,17 @@ public class Pause : MonoBehaviour
         {
             if (pauseCount == 1)
             {
-                narrator?.PlayOneShot(pauseMocking);
+                if(!broadcast.narr.isPlaying)
+                {
+                    narrator?.PlayOneShot(pauseMocking);
+                }
             }
             else
             {
-                narrator?.PlayOneShot(pauseMocking2);
+                if (!broadcast.narr.isPlaying)
+                {
+                    narrator?.PlayOneShot(pauseMocking2);
+                }
             }
         }
     }
@@ -85,7 +93,7 @@ public class Pause : MonoBehaviour
         pauseMenu.SetActive(false);
         narrator?.Stop();
 
-        if(quitMocking != null)
+        if(quitMocking != null && !broadcast.narr.isPlaying)
         {
             narrator?.PlayOneShot(quitMocking);
         }
